@@ -3,8 +3,7 @@ import './style.css'
 
 const params = {
     apiKey: 'AIzaSyDYQqUVga8bZO67P0H-AHA0nd9ykD0uVv8',
-    el: '#fsmap',
-    debug: true
+    el: '#fsmap'
 }
 const options = {
     center: { lat: 43.54427, lng: 10.32615 },

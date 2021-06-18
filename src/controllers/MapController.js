@@ -1,19 +1,21 @@
 import { Loader, LoaderOptions } from 'google-maps';
 import createInfoWindow from '../components/createInfoWindow';
-
-createInfoWindow({ title: "hello", content: 'Hello 2' })
+import MarkerClusterer from '@googlemaps/markerclustererplus'
 
 class MapController {
     constructor(params, options = {}, markers = []) {
-        const { el, apiKey, debug } = params
-        this.debug = debug ? debug : false
-
+        const defaultParams = {
+            debug: false,
+            clusters: false
+        }
         const defaultMapOptions = {
             center: { lat: -34, lng: 150 },
             zoom: 8
         }
         const mapOptions = { ...defaultMapOptions, ...options };
-
+        const mapParams = { ...defaultParams, ...params }
+        const { el, apiKey, debug, clusters } = mapParams
+        this.debug = debug ? debug : false
 
         if (!apiKey)
             this.log('No apiKey selected. ')
@@ -26,6 +28,13 @@ class MapController {
             this.mapContainer = document.querySelector(el);
             this.initMap(mapOptions)
             this.initMarkers(markers)
+            console.log(this.markers, this.gmap);
+            if (clusters) {
+                new MarkerClusterer(this.gmap, this.markers, {
+                    imagePath:
+                        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+                })
+            }
         })
 
     }
@@ -70,7 +79,7 @@ class MapController {
                     infowindow.open(this.gmap, markerElement);
                 });
             }
-
+            return markerElement;
         })
         return this.markers;
     }
